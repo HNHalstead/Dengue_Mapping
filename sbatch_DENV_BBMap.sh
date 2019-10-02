@@ -14,6 +14,8 @@
 module load bioinfo-tools
 module load bbmap/38.61b
 
+
+"try .bbmap.sh if bbmap.sh doesnt work"
 bbmap.sh ref=bb.genome.fasta
 
 
@@ -28,14 +30,14 @@ bbmap.sh -Xmx100g threads=4 in1="$i"_1.fastq.gz in2="$i"_2.fastq.gz interleaved=
 "Now the indel settings is for humans, not sure how this will work
 for bedbugs. But give it a go."
 
-“outu” = unmapped reads
-“outm” = mapped reads
+ " “outu” = unmapped reads"
+" “outm” = mapped reads "
 
-https://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/bbmap-guide/
-https://github.com/BioInfoTools/BBMap/blob/master/docs/UsageGuide.txt
+"https://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/bbmap-guide/ "
+"https://github.com/BioInfoTools/BBMap/blob/master/docs/UsageGuide.txt"
 
 
-You can do this as a shell script (save code below as map.away.bb.reads.sh or similar):
+"You can do this as a shell script (save code below as map.away.bb.reads.sh or similar):"
 
 for file in *_R1.fastq.gz;
     do
