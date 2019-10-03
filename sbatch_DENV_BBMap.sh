@@ -15,7 +15,7 @@ module load bioinfo-tools
 module load bbmap/38.61b
 
 
-# Generate an index
+"try .bbmap.sh if bbmap.sh doesnt work"
 bbmap.sh ref=bb.genome.fasta
 
 # The index is written to the location /ref/
