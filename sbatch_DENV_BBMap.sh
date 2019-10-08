@@ -48,6 +48,6 @@ for file in *_R1.fastq.gz;
 		base=${name%%_1.fastq.gz}
         echo $base
 
-        bbmap.sh threads=4 in1="$base"_R1.fastq.gz in2="$base"_R2.fastq.gz interleaved=true path=$db/bbmap 	maxindel=20k build=3 outu1="$base"_no.bb_R1.fastq.gz outu2="$base"_no.bb_R2.fastq.gz outm1="$base"_bb_R1.fastq.gz outm2="$base"_bb_R2.fastq.gz
+        bbmap.sh ref=Denv1_cn_ref.fasta threads=4 in1="$base"_R1.fastq.gz in2="$base"_R2.fastq.gz interleaved=true path=$db/bbmap 	maxindel=20k build=3 outu1="$base"_no.bb_R1.fastq.gz outu2="$base"_no.bb_R2.fastq.gz outm1="$base"_bb_R1.fastq.gz outm2="$base"_bb_R2.fastq.gz
 
     done;
