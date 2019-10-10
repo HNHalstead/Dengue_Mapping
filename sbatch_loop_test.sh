@@ -11,7 +11,7 @@
 for file in *fq.gz;
     do
         name=${file##*/}
-		echo $name
+		echo $name >> loop_test.txt
 		base=${name%%_1.fastq.gz}
-        echo $base
+        echo $base >> loop_test.txt
     done;
