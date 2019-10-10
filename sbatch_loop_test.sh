@@ -8,7 +8,7 @@
 #SBATCH --mail-user halsteadholly73@gmail.com
 
 
-for file in *fq.gz;
+tar -tf H201SC19071015_20190905_X201SC19071015-Z01-F001_YJfd4B.tar.gz | for file in *fq.gz;
     do
         name=${file##*/}
 		echo $name >> loop_test.txt
