@@ -41,7 +41,7 @@ bbmap.sh ref=Denv1_cn_ref.fasta
 
 #You can do this as a shell script (save code below as map.away.bb.reads.sh or similar):
 
-for file in *_R1.fastq.gz;
+for file in *fq.gz;
     do
         name=${file##*/}
 		echo $name
