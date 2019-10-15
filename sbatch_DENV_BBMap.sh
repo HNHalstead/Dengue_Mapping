@@ -1,8 +1,8 @@
 #!/bin/bash -l
 #SBATCH -A snic2019-8-68
 #SBATCH -p core
-#SBATCH -n 1
-#SBATCH -t 04:00:00
+#SBATCH -n 4
+#SBATCH -t 20:00:00
 #SBATCH -J hh_BBMap_DENV_run1
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user halsteadholly73@gmail.com
@@ -16,10 +16,9 @@ module load bbmap/38.61b
 
 # try .bbmap.sh if bbmap.sh doesnt work"
 #bbmap.sh ref=bb.genome.fasta
-bbmap.sh ref=Denv1_cn_ref.fasta
+##### bbmap.sh ref=Denv1_cn_ref.fasta
 
 # The index is written to the location /ref/
-
 
 # Next step is to map
 
@@ -28,9 +27,6 @@ bbmap.sh ref=Denv1_cn_ref.fasta
 ## threads changed to 4 from 32 as 32 was over-kill
 ## maxindel reduced from 100k to 20k as Dengue isn't that large
 ## -Xmx100g not needed with Uppmax
-
-#"Now the indel settings is for humans, not sure how this will work
-#for bedbugs. But give it a go."
 
 #“outu” = unmapped reads
 #“outm” = mapped reads
@@ -41,13 +37,16 @@ bbmap.sh ref=Denv1_cn_ref.fasta
 
 #You can do this as a shell script (save code below as map.away.bb.reads.sh or similar):
 
-for file in *fq.gz;
-    do
-        name=${file##*/}
-		echo $name
-		base=${name%%_1.fastq.gz}
-        echo $base
-
-        bbmap.sh ref=Denv1_cn_ref.fasta threads=4 in1="$base"_R1.fastq.gz in2="$base"_R2.fastq.gz interleaved=true path=$db/bbmap 	maxindel=20k build=3 outu1="$base"_no.bb_R1.fastq.gz outu2="$base"_no.bb_R2.fastq.gz outm1="$base"_bb_R1.fastq.gz outm2="$base"_bb_R2.fastq.gz
-
-    done;
+for file in $(tar -tf H201SC19071015_20190905_X201SC19071015-Z01-F001_YJfd4B.tar.gz | grep ".fq.gz");
+do
+    name=${file##*/}
+    echo $name >> long_loop_test_if.txt
+    if [[ ${file: -7} == "2.fq.gz" ]];
+    then
+      base=${name%%_2.fq.gz}
+      echo $base >> long_loop_test_if.txt
+      echo "if worked" >> long_loop_test_if.txt
+      bbmap.sh ref=Denv1_cn_ref.fasta threads=4 in1="$base"_1.fq.gz in2="$base"_2.fq.gz interleaved=true maxindel=20k build=3 outu1="$base"_bb_R1.fastq.gz outu2="$base"_bb_R2.fastq.gz outm1="$base"_bb_R1.fastq.gz outm2="$base"_bb_R2.fastq.gz
+    fi
+    continue
+done
