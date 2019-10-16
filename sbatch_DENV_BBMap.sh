@@ -37,7 +37,7 @@ module load bbmap/38.61b
 
 #You can do this as a shell script (save code below as map.away.bb.reads.sh or similar):
 
-for file in $(tar -tf H201SC19071015_20190905_X201SC19071015-Z01-F001_YJfd4B.tar.gz | grep ".fq.gz");
+for file in $(tar xvzf H201SC19071015_20190905_X201SC19071015-Z01-F001_YJfd4B.tar.gz | grep ".fq.gz");
 do
     name=${file##*/}
     echo $name >> long_loop_test_if.txt
