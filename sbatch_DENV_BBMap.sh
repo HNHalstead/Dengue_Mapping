@@ -37,7 +37,7 @@ module load bbmap/38.61b
 #You can do this as a shell script (save code below as map.away.bb.reads.sh or similar):
 PROJ_DIR=$PWD
 cd $SNIC_TMP #unzips into temp file which saves time on the network
-for file in $(tar xvzf H201SC19071015_20190905_X201SC19071015-Z01-F001_YJfd4B.tar.gz | grep "_1.fq.gz");
+for file in $(tar xvzf /crex/proj/snic2019-8-68/proj_holly/H201SC19071015_20190905_X201SC19071015-Z01-F001_YJfd4B.tar.gz | grep "_1.fq.gz");
 do
     #name=$(basename "$file") #${file##*/}
     prefix=$(basename "$file" _1.fq.gz )
