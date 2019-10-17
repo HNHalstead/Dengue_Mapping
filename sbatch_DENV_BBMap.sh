@@ -31,22 +31,34 @@ module load bbmap/38.61b
 #“outu” = unmapped reads
 #“outm” = mapped reads
 
-#https://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/bbmap-guide/
-#https://github.com/BioInfoTools/BBMap/blob/master/docs/UsageGuide.txt
+
 
 
 #You can do this as a shell script (save code below as map.away.bb.reads.sh or similar):
-
-for file in $(tar xvzf H201SC19071015_20190905_X201SC19071015-Z01-F001_YJfd4B.tar.gz | grep ".fq.gz");
+PROJ_DIR=$PWD
+cd $SNIC_TMP #unzips into temp file which saves time on the network
+for file in $(tar xvzf H201SC19071015_20190905_X201SC19071015-Z01-F001_YJfd4B.tar.gz | grep "_1.fq.gz");
 do
-    name=${file##*/}
-    echo $name >> long_loop_test_if.txt
-    if [[ ${file: -7} == "2.fq.gz" ]];
-    then
-      base=${name%%_2.fq.gz}
-      echo $base >> long_loop_test_if.txt
-      echo "if worked" >> long_loop_test_if.txt
-      bbmap.sh ref=Denv1_cn_ref.fasta threads=4 in1="$base"_1.fq.gz in2="$base"_2.fq.gz interleaved=true maxindel=20k build=3 outu1="$base"_bb_R1.fastq.gz outu2="$base"_bb_R2.fastq.gz outm1="$base"_bb_R1.fastq.gz outm2="$base"_bb_R2.fastq.gz
-    fi
-    continue
+    #name=$(basename "$file") #${file##*/}
+    prefix=$(basename "$file" _1.fq.gz )
+    #echo $name >> long_loop_test_if.txt
+    #if [[ ${file} ~ "2.fq.gz$" ]];
+    #then
+      #base=${name%%_2.fq.gz}
+      #echo $base >> long_loop_test_if.txt
+      #echo "if worked" >> long_loop_test_if.txt
+    #bbmap.sh ref=$PROJ_DIR/Denv1_cn_ref.fasta threads=${SLURM_NPROCS} \
+    #in1="$base"_1.fq.gz \
+    #  in2="$base"_2.fq.gz interleaved=true maxindel=20k build=3 \
+    #  outu1="$base"_bb_R1.fastq.gz outu2="$base"_bb_R2.fastq.gz \
+    #  outm1="$base"_bb_R1.fastq.gz outm2="$base"_bb_R2.fastq.gz
+    bbmap.sh ref="$PROJ_DIR/Denv1_cn_ref.fasta" threads="${SLURM_NPROCS}" \
+      in1="$file" in2="${file/_1.fq.gz/_2.fq.gz}" interleaved=true maxindel=20k build=3 \
+      outu1="${prefix}_bb_R1.fastq.gz" outu2="${prefix}_bb_R2.fastq.gz" \
+      outm1="${prefix}_bb_R1.fastq.gz" outm2="${prefix}_bb_R2.fastq.gz"
+    #fi
+    #continue
 done
+cp "${prefix}_bb_R1.fastq.gz" "${prefix}_bb_R2.fastq.gz" "${prefix}_bb_R1.fastq.gz" "${prefix}_bb_R2.fastq.gz" $PROJ_DIR/
+
+# mahesh.panchal@nbis.se
