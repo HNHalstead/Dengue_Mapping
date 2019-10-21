@@ -3,7 +3,7 @@
 #SBATCH -p core
 #SBATCH -n 4
 #SBATCH -t 20:00:00
-#SBATCH -J hh_BBMap_DENV_run1
+#SBATCH -J hh_BBMap_DENV_run2
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user halsteadholly73@gmail.com
 
@@ -12,6 +12,7 @@
 # Load modules
 module load bioinfo-tools
 module load bbmap/38.61b
+module load samtools/1.9
 
 
 # try .bbmap.sh if bbmap.sh doesnt work"
@@ -25,7 +26,7 @@ module load bbmap/38.61b
 # bbmap.sh threads=4 in1="$i"_1.fastq.gz in2="$i"_2.fastq.gz interleaved=true path=$db/bbmap maxindel=20k build=3 outu1="$i"_no.bb_1.fastq.gz outu2="$i"_no.bb_2.fastq.gz outm1="$i"_bb_1.fastq.gz outm2="$i"_bb_2.fastq.gz
 
 ## threads changed to 4 from 32 as 32 was over-kill
-## maxindel reduced from 100k to 20k as Dengue isn't that large
+## maxindel reduced from 100k to default of 16k as Dengue isn't that large
 ## -Xmx100g not needed with Uppmax
 
 #“outu” = unmapped reads
@@ -39,26 +40,24 @@ PROJ_DIR=$PWD
 cd $SNIC_TMP #unzips into temp file which saves time on the network
 for file in $(tar xvzf /crex/proj/snic2019-8-68/proj_holly/H201SC19071015_20190905_X201SC19071015-Z01-F001_YJfd4B.tar.gz | grep "_1.fq.gz");
 do
-    #name=$(basename "$file") #${file##*/}
+
     prefix=$(basename "$file" _1.fq.gz )
-    #echo $name >> long_loop_test_if.txt
-    #if [[ ${file} ~ "2.fq.gz$" ]];
-    #then
-      #base=${name%%_2.fq.gz}
-      #echo $base >> long_loop_test_if.txt
-      #echo "if worked" >> long_loop_test_if.txt
-    #bbmap.sh ref=$PROJ_DIR/Denv1_cn_ref.fasta threads=${SLURM_NPROCS} \
-    #in1="$base"_1.fq.gz \
-    #  in2="$base"_2.fq.gz interleaved=true maxindel=20k build=3 \
-    #  outu1="$base"_bb_R1.fastq.gz outu2="$base"_bb_R2.fastq.gz \
-    #  outm1="$base"_bb_R1.fastq.gz outm2="$base"_bb_R2.fastq.gz
     bbmap.sh ref="$PROJ_DIR/Denv1_cn_ref.fasta" threads="${SLURM_NPROCS}" \
-      in1="$file" in2="${file/_1.fq.gz/_2.fq.gz}" interleaved=true maxindel=20k build=3 \
-      outu1="${prefix}_bb_R1.fastq.gz" outu2="${prefix}_bb_R2.fastq.gz" \
-      outm1="${prefix}_bb_R1.fastq.gz" outm2="${prefix}_bb_R2.fastq.gz"
-    #fi
-    #continue
+      in1="$file" in2="${file/_1.fq.gz/_2.fq.gz}" build=3 \
+      outu1="${prefix}_bb_R1.bam" outu2="${prefix}_bb_R2.bam" \
+      outm1="${prefix}_bb_R1.bam" outm2="${prefix}_bb_R2.fastq.bam"
+      cp "${prefix}_bb_R1.bam" "${prefix}_bb_R2.bam" "${prefix}_bb_R1.bam" "${prefix}_bb_R2.fastq.bam" $PROJ_DIR/
+
 done
-cp "${prefix}_bb_R1.fastq.gz" "${prefix}_bb_R2.fastq.gz" "${prefix}_bb_R1.fastq.gz" "${prefix}_bb_R2.fastq.gz" $PROJ_DIR/
+
+
+module load bioinfo-tools
+module load samtools/1.9
+PROJ_DIR=$PWD
+for bam in $PROJ_DIR/*bam;
+do
+  samtools sort $bam
+  echo "$bam sorted" >> samtools_check.txt
+done
 
 # mahesh.panchal@nbis.se
