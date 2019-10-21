@@ -2,7 +2,7 @@
 #SBATCH -A snic2019-8-68
 #SBATCH -p core
 #SBATCH -n 4
-#SBATCH -t 20:00:00
+#SBATCH -t 30:00:00
 #SBATCH -J hh_BBMap_DENV_run2
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user halsteadholly73@gmail.com
