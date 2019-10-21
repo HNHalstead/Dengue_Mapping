@@ -44,20 +44,25 @@ do
     prefix=$(basename "$file" _1.fq.gz )
     bbmap.sh ref="$PROJ_DIR/Denv1_cn_ref.fasta" threads="${SLURM_NPROCS}" \
       in1="$file" in2="${file/_1.fq.gz/_2.fq.gz}" build=3 \
-      outu1="${prefix}_bb_R1.bam" outu2="${prefix}_bb_R2.bam" \
-      outm1="${prefix}_bb_R1.bam" outm2="${prefix}_bb_R2.fastq.bam"
-      cp "${prefix}_bb_R1.bam" "${prefix}_bb_R2.bam" "${prefix}_bb_R1.bam" "${prefix}_bb_R2.fastq.bam" $PROJ_DIR/
+      outu1="${prefix}_bb_R1.sam" outu2="${prefix}_bb_R2.sam" \
+      outm1="${prefix}_bb_R1.sam" outm2="${prefix}_bb_R2.sam"
+      for SAM in $SNIC_TMP/*.sam:
+      do
+        pre=$(basename "SAM" .sam)
+        samtools view -S -b "${pre}.sam" > "${pre}.bam"
 
+        cp "${prefix}_bb_R1.bam" "${prefix}_bb_R2.bam" "${prefix}_bb_R1.bam" "${prefix}_bb_R2.fastq.bam" $PROJ_DIR/Mapped_Files/
+      done
 done
 
 
-module load bioinfo-tools
-module load samtools/1.9
-PROJ_DIR=$PWD
-for bam in $PROJ_DIR/*bam;
-do
-  samtools sort $bam
-  echo "$bam sorted" >> samtools_check.txt
-done
+#module load bioinfo-tools
+#module load samtools/1.9
+#PROJ_DIR=$PWD
+#for bam in $PROJ_DIR/*bam;
+#do
+#  samtools sort $bam
+#  echo "$bam sorted" >> samtools_check.txt
+#done
 
 # mahesh.panchal@nbis.se
