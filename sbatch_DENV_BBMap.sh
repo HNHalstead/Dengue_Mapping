@@ -48,7 +48,7 @@ do
       outm1="${prefix}_bb_R1.sam" outm2="${prefix}_bb_R2.sam"
       for SAM in $SNIC_TMP/*.sam:
       do
-        pre=$(basename "SAM" .sam)
+        pre=$(basename "$SAM" .sam)
         samtools view -S -b "${pre}.sam" > "${pre}.bam"
       done
       cp "${prefix}_bb_R1.bam" "${prefix}_bb_R2.bam" "${prefix}_bb_R1.bam" "${prefix}_bb_R2.fastq.bam" $PROJ_DIR/Mapped_Files/
