@@ -46,7 +46,7 @@ do
       in1="$file" in2="${file/_1.fq.gz/_2.fq.gz}" build=3 \
       outu1="${prefix}_bb_R1.sam" outu2="${prefix}_bb_R2.sam" \
       outm1="${prefix}_bb_R1.sam" outm2="${prefix}_bb_R2.sam"
-      for SAM in $SNIC_TMP/*.sam:
+      for SAM in *.sam;
       do
         pre=$(basename "$SAM" .sam)
         samtools view -S -b "${pre}.sam" > "${pre}.bam"
