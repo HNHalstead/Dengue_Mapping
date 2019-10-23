@@ -3,7 +3,7 @@
 #SBATCH -p core
 #SBATCH -n 4
 #SBATCH -t 30:00:00
-#SBATCH -J hh_BBMap_DENV_run2
+#SBATCH -J hh_BBMap_DENV_run3
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user halsteadholly73@gmail.com
 
@@ -36,7 +36,6 @@ module load samtools/1.9
 
 
 #You can do this as a shell script (save code below as map.away.bb.reads.sh or similar):
-mkdir Mapped_Files
 PROJ_DIR=$PWD
 cd $SNIC_TMP #unzips into temp file which saves time on the network
 for file in $(tar xvzf /crex/proj/snic2019-8-68/proj_holly/H201SC19071015_20190905_X201SC19071015-Z01-F001_YJfd4B.tar.gz | grep "_1.fq.gz");
@@ -45,13 +44,13 @@ do
     prefix=$(basename "$file" _1.fq.gz )
     bbmap.sh ref="$PROJ_DIR/Denv1_cn_ref.fasta" threads="${SLURM_NPROCS}" \
       in1="$file" in2="${file/_1.fq.gz/_2.fq.gz}" build=3 \
-      outu1="${prefix}_bb_R1.sam" outu2="${prefix}_bb_R2.sam" \
-      outm1="${prefix}_bb_R1.sam" outm2="${prefix}_bb_R2.sam"
-      for SAM in *.sam;
-      do
-        pre=$(basename "$SAM" .sam)
-        samtools view -S -b "${pre}.sam" > "${pre}.bam"
-      done
+      outu1="${prefix}_bb_R1.bam" outu2="${prefix}_bb_R2.bam" \
+      outm1="${prefix}_bb_R1.bam" outm2="${prefix}_bb_R2.bam"
+      #for SAM in *.sam;
+      #do
+      #  pre=$(basename "$SAM" .sam)
+      #  samtools view -S -b "${pre}.sam" > "${pre}.bam"
+      #done
       cp "${prefix}_bb_R1.bam" "${prefix}_bb_R2.bam" "${prefix}_bb_R1.bam" "${prefix}_bb_R2.fastq.bam" $PROJ_DIR/Mapped_Files/
 done
 
