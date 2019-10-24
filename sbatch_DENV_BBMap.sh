@@ -3,6 +3,8 @@
 #SBATCH -p core
 #SBATCH -n 4
 #SBATCH -t 30:00:00
+#SBATCH -o hh_BBMap_DENV_run3.stdout
+#SBATCH -e hh_BBMap_DENV_run3.stderr
 #SBATCH -J hh_BBMap_DENV_run3
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user halsteadholly73@gmail.com
@@ -44,19 +46,20 @@ do
     prefix=$(basename "$file" _1.fq.gz )
     echo ref="$PROJ_DIR/Denv1_cn_ref.fasta" threads="${SLURM_NPROCS}" \
       in1="$file" in2="${file/_1.fq.gz/_2.fq.gz}" build=3 \
-      outu1="${prefix}_bb_un_R1.sam" outu2="${prefix}_bb_un_R2.sam" \
-      outm1="${prefix}_bb_R1.sam" outm2="${prefix}_bb_R2.sam"
-      
+      outu="${prefix}_bb_un.sam" \
+      outm="${prefix}_bb.sam" \
+      bs=$PROJ_DIR/Dengue_Mapping/sam2bam.sh
+
     bbmap.sh ref="$PROJ_DIR/Denv1_cn_ref.fasta" threads="${SLURM_NPROCS}" \
       in1="$file" in2="${file/_1.fq.gz/_2.fq.gz}" build=3 \
-      outu1="${prefix}_bb_un_R1.sam" outu2="${prefix}_bb_un_R2.sam" \
-      outm1="${prefix}_bb_R1.sam" outm2="${prefix}_bb_R2.sam"
-      #bs= "$PROJ_DIR/Dengue_Mapping/sam2bam.sh"
-      for SAM in "${prefix}_*.sam";
-      do
-        pre=$(basename "$SAM" .sam)
-        samtools view -S -b "${pre}.sam" > "${pre}.bam"
-      done
+      outu="${prefix}_bb_un.sam" \
+      outm="${prefix}_bb.sam" \
+      bs=$PROJ_DIR/Dengue_Mapping/sam2bam.sh
+      #for SAM in "${prefix}_*.sam";
+      #do
+      #  pre=$(basename "$SAM" .sam)
+      #  samtools view -S -b "${pre}.sam" > "${pre}.bam"
+      #done
       cp "${prefix}_*.bam" $PROJ_DIR/Mapped_Files/
       cp "${prefix}_*.bam.bai" $PROJ_DIR/Mapped_Files/
 
