@@ -48,21 +48,22 @@ do
       in1="$file" in2="${file/_1.fq.gz/_2.fq.gz}" build=3 \
       outu="${prefix}_bb_un.sam" \
       outm="${prefix}_bb.sam" \
-      bs=$PROJ_DIR/Dengue_Mapping/sam2bam.sh
+      bs=$PROJ_DIR/Dengue_Mapping/sam2bam.sh; sh sam2bam.sh
+      echo "${prefix} bam files created" >> bam_file_tracking.txt
 
     bbmap.sh ref="$PROJ_DIR/Denv1_cn_ref.fasta" threads="${SLURM_NPROCS}" \
       in1="$file" in2="${file/_1.fq.gz/_2.fq.gz}" build=3 \
       outu="${prefix}_bb_un.sam" \
       outm="${prefix}_bb.sam" \
-      bs=$PROJ_DIR/Dengue_Mapping/sam2bam.sh
+      bs=$PROJ_DIR/Dengue_Mapping/sam2bam.sh; sh sam2bam.sh
       echo "${prefix} bam files created" >> bam_file_tracking.txt
       #for SAM in "${prefix}_*.sam";
       #do
       #  pre=$(basename "$SAM" .sam)
       #  samtools view -S -b "${pre}.sam" > "${pre}.bam"
       #done
-      mv *.bam $PROJ_DIR/Mapped_Files/
-      mv *.bam.bai $PROJ_DIR/Mapped_Files/
+      mv "${prefix}_bb_un.bam" "${prefix}_bb.bam" $PROJ_DIR/Mapped_Files/
+      mv "${prefix}_bb_un.bam.bai" "${prefix}_bb.bam.bai" $PROJ_DIR/Mapped_Files/
       echo "${prefix} bam files moved"
 
       #cp "${prefix}_bb_R1.bam" "${prefix}_bb_R2.bam" "${prefix}_bb_un_R1.bam" "${prefix}_bb_un_R2.fastq.bam" $PROJ_DIR/Mapped_Files/
