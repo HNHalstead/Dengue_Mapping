@@ -3,9 +3,9 @@
 #SBATCH -p core
 #SBATCH -n 4
 #SBATCH -t 40:00:00
-#SBATCH -o hh_BBMap_DENV_run3.stdout
-#SBATCH -e hh_BBMap_DENV_run3.stderr
-#SBATCH -J hh_BBMap_DENV_run3
+#SBATCH -o hh_BBMap_DENV_run4.stdout
+#SBATCH -e hh_BBMap_DENV_run4.stderr
+#SBATCH -J hh_BBMap_DENV_run4
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user halsteadholly73@gmail.com
 
@@ -55,13 +55,15 @@ do
       outu="${prefix}_bb_un.sam" \
       outm="${prefix}_bb.sam" \
       bs=$PROJ_DIR/Dengue_Mapping/sam2bam.sh
+      echo "${prefix} bam files created" >> bam_file_tracking.txt
       #for SAM in "${prefix}_*.sam";
       #do
       #  pre=$(basename "$SAM" .sam)
       #  samtools view -S -b "${pre}.sam" > "${pre}.bam"
       #done
-      cp "${prefix}_*.bam" $PROJ_DIR/Mapped_Files/
-      cp "${prefix}_*.bam.bai" $PROJ_DIR/Mapped_Files/
+      cp ${prefix}_*.bam $PROJ_DIR/Mapped_Files/
+      cp ${prefix}_*.bam.bai $PROJ_DIR/Mapped_Files/
+      echo "${prefix} bam files moved"
 
       #cp "${prefix}_bb_R1.bam" "${prefix}_bb_R2.bam" "${prefix}_bb_un_R1.bam" "${prefix}_bb_un_R2.fastq.bam" $PROJ_DIR/Mapped_Files/
       #cp "${prefix}_bb_R1.bam.bai" "${prefix}_bb_R2.bam.bai" "${prefix}_bb_un_R1.bam.bai" "${prefix}_bb_un_R2.bam.bai" $PROJ_DIR/Mapped_Files/
