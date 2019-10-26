@@ -44,22 +44,25 @@ for file in $(tar xvzf /crex/proj/snic2019-8-68/proj_holly/H201SC19071015_201909
 do
 
     prefix=$(basename "$file" _1.fq.gz )
-    echo ref="$PROJ_DIR/Denv1_cn_ref.fasta" threads="${SLURM_NPROCS}" \
+    echo 'ref="$PROJ_DIR/Denv1_cn_ref.fasta" threads="${SLURM_NPROCS}" \
       in1="$file" in2="${file/_1.fq.gz/_2.fq.gz}" build=3 \
       outu="${prefix}_bb_un.sam" \
-      outm="${prefix}_bb.sam" \
-      bs=$PROJ_DIR/Dengue_Mapping/sam2bam.sh
+      outm="${prefix}_bb.sam" '
 
     bbmap.sh ref="$PROJ_DIR/Denv1_cn_ref.fasta" threads="${SLURM_NPROCS}" \
       in1="$file" in2="${file/_1.fq.gz/_2.fq.gz}" build=3 \
       outu="${prefix}_bb_un.sam" \
-      outm="${prefix}_bb.sam" \
-      bs=$PROJ_DIR/Dengue_Mapping/sam2bam.sh
+      outm="${prefix}_bb.sam"
+
+      $PROJ_DIR/Dengue_Mapping/sam2bam.sh "${prefix}_bb.sam"
+      $PROJ_DIR/Dengue_Mapping/sam2bam.sh "${prefix}_bb_un.sam"
+
       #for SAM in "${prefix}_*.sam";
       #do
       #  pre=$(basename "$SAM" .sam)
       #  samtools view -S -b "${pre}.sam" > "${pre}.bam"
       #done
+      mkdir Mapped_Files
       cp "${prefix}_*.bam" $PROJ_DIR/Mapped_Files/
       cp "${prefix}_*.bam.bai" $PROJ_DIR/Mapped_Files/
 
