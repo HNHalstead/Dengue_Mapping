@@ -54,18 +54,22 @@ do
 
     bbmap.sh ref="$PROJ_DIR/Denv1_cn_ref.fasta" threads="${SLURM_NPROCS}" \
       in1="$file" in2="${file/_1.fq.gz/_2.fq.gz}" build=3 \
-      outu="${prefix}_bb_un.sam" \
-      outm="${prefix}_bb.sam"
+      out="${prefix}_bb.sam"
+      #outu="${prefix}_bb_un.sam" \
+      #outm="${prefix}_bb.sam"
 
       module load bioinfo-tools
       module load samtools/1.9
 
       $PROJ_DIR/Dengue_Mapping/sam2bam.sh "${prefix}_bb.sam"
-      $PROJ_DIR/Dengue_Mapping/sam2bam.sh "${prefix}_bb_un.sam"
+      #$PROJ_DIR/Dengue_Mapping/sam2bam.sh "${prefix}_bb_un.sam"
 
       mkdir Mapped_Files
-      cp "${prefix}_*.bam" $PROJ_DIR/Mapped_Files/
-      cp "${prefix}_*.bam.bai" $PROJ_DIR/Mapped_Files/
+      cp "${prefix}_bb.bam" $PROJ_DIR/Mapped_Files/
+      #cp "${prefix}_bb_un.bam" $PROJ_DIR/Mapped_Files/
+      cp "${prefix}_bb.bam.bai" $PROJ_DIR/Mapped_Files/
+      #cp "${prefix}_bb_un.bam.bai" $PROJ_DIR/Mapped_Files/
+
 
       #cp "${prefix}_bb_R1.bam" "${prefix}_bb_R2.bam" "${prefix}_bb_un_R1.bam" "${prefix}_bb_un_R2.fastq.bam" $PROJ_DIR/Mapped_Files/
       #cp "${prefix}_bb_R1.bam.bai" "${prefix}_bb_R2.bam.bai" "${prefix}_bb_un_R1.bam.bai" "${prefix}_bb_un_R2.bam.bai" $PROJ_DIR/Mapped_Files/
