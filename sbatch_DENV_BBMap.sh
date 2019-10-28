@@ -74,10 +74,10 @@ do
       #$PROJ_DIR/Dengue_Mapping/sam2bam.sh "${prefix}_bb.sam"
       #$PROJ_DIR/Dengue_Mapping/sam2bam.sh "${prefix}_bb_un.sam"
 
-      mkdir Mapped_Files
-      cp "${prefix}_bb.bam" $PROJ_DIR/Mapped_Files/
+      mkdir $PROJ_DIR/Mapped_Files
+      cp "${prefix}_bb_sorted.bam" $PROJ_DIR/Mapped_Files
       #cp "${prefix}_bb_un.bam" $PROJ_DIR/Mapped_Files/
-      cp "${prefix}_bb.bam.bai" $PROJ_DIR/Mapped_Files/
+      cp "${prefix}_bb_sorted.bam.bai" $PROJ_DIR/Mapped_Files
       #cp "${prefix}_bb_un.bam.bai" $PROJ_DIR/Mapped_Files/
 
 
