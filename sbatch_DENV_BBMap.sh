@@ -3,8 +3,8 @@
 #SBATCH -p core
 #SBATCH -n 4
 #SBATCH -t 40:00:00
-#SBATCH -o hh_BBMap_DENV_run4.stdout
-#SBATCH -e hh_BBMap_DENV_run4.stderr
+#SBATCH -o hh_BBMap_DENV_run5.stdout
+#SBATCH -e hh_BBMap_DENV_run5.stderr
 #SBATCH -J hh_BBMap_DENV_run4
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user halsteadholly73@gmail.com
