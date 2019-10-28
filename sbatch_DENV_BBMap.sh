@@ -3,9 +3,9 @@
 #SBATCH -p core
 #SBATCH -n 4
 #SBATCH -t 40:00:00
-#SBATCH -o hh_BBMap_DENV_run5.stdout
-#SBATCH -e hh_BBMap_DENV_run5.stderr
-#SBATCH -J hh_BBMap_DENV_run4
+#SBATCH -o hh_BBMap_DENV_run6.stdout
+#SBATCH -e hh_BBMap_DENV_run6.stderr
+#SBATCH -J hh_BBMap_DENV_run6
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user halsteadholly73@gmail.com
 
@@ -39,6 +39,7 @@ module load samtools/1.9
 
 #You can do this as a shell script (save code below as map.away.bb.reads.sh or similar):
 PROJ_DIR=$PWD
+echo $PWD
 cd $SNIC_TMP #unzips into temp file which saves time on the network
 for file in $(tar xvzf /crex/proj/snic2019-8-68/proj_holly/H201SC19071015_20190905_X201SC19071015-Z01-F001_YJfd4B.tar.gz | grep "_1.fq.gz");
 do
@@ -61,7 +62,16 @@ do
       module load bioinfo-tools
       module load samtools/1.9
 
-      $PROJ_DIR/Dengue_Mapping/sam2bam.sh "${prefix}_bb.sam"
+      echo "Note: Please ignore any warnings about 'EOF marker is absent'; this is a bug in samtools that occurs when using piped input."
+      samtools view -bShu "${prefix}_bb.sam" | samtools sort -o "${prefix}_bb.sam"_bb_sorted.bam
+      samtools index "${prefix}_bb.sam"_bb_sorted.bam
+
+      #b for bam file, h to include header in output, u for uncompressed bam \
+      # as it is being piped, S ignored compatability with previous samtools versions
+
+
+
+      #$PROJ_DIR/Dengue_Mapping/sam2bam.sh "${prefix}_bb.sam"
       #$PROJ_DIR/Dengue_Mapping/sam2bam.sh "${prefix}_bb_un.sam"
 
       mkdir Mapped_Files
