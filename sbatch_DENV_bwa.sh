@@ -29,19 +29,15 @@ for file in $(tar xvzf /crex/proj/snic2019-8-68/proj_holly/H201SC19071015_201909
 do
   echo "prefix=$(basename "$file" _1.fq.gz )
     bwa index -p "${prefix}" /crex/proj/snic2019-8-68/proj_holly/Denv1_cn_ref.fasta
-    bwa mem -M "${prefix}" "$file" "${file/_1.fq.gz/_2.fq.gz}" | samtools sort -o ${prefix}_sorted.bam"
+    bwa mem -M "${prefix}" "$file" "${file/_1.fq.gz/_2.fq.gz}" | samtools sort -o ${prefix}_sorted.bam
+    samtools index $BAM"
 
   prefix=$(basename "$file" _1.fq.gz )
   bwa index -p "${prefix}" /crex/proj/snic2019-8-68/proj_holly/Denv1_cn_ref.fasta
   bwa mem -M "${prefix}" "$file" "${file/_1.fq.gz/_2.fq.gz}" | samtools sort -o ${prefix}_sorted.bam
+  samtools index $BAM
 
   echo "mv ${prefix}_sorted.bam* $PROJ_DIR/Dengue_bwa/"
   mv ${prefix}_sorted.bam* $PROJ_DIR/Dengue_bwa/
 
-
-
 done
-
-# Load modules
-module load bioinfo-tools
-module load samtools/1.9
