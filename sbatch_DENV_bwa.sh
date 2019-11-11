@@ -35,9 +35,18 @@ do
   prefix=$(basename "$file" _1.fq.gz )
   bwa index -p "${prefix}" /crex/proj/snic2019-8-68/proj_holly/Denv1_cn_ref.fasta
   bwa mem -M "${prefix}" "$file" "${file/_1.fq.gz/_2.fq.gz}" | samtools sort -o ${prefix}_sorted.bam
-  samtools index $BAM
+
 
   echo "mv ${prefix}_sorted.bam* $PROJ_DIR/Dengue_bwa/"
   mv ${prefix}_sorted.bam* $PROJ_DIR/Dengue_bwa/
 
+done
+
+module load bioinfo-tools
+module load samtools/1.9
+
+for BAM in /crex/proj/snic2019-8-68/proj_holly/Dengue_bwa/*.bam;
+do
+  samtools index -b $BAM
+  echo "$BAM has been indexed"
 done
