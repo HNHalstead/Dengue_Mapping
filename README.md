@@ -76,3 +76,13 @@ sbatch sbatch_DENV_bwa.sh
 module load java bioinfo-tools IGV
 igv-node
 ```
+
+<br/>
+<br/>
+
+
+### Troubleshooting
+###### Indexing can be done separately using the command
+```
+sbatch sbatch_DENV_index.sh
+```
